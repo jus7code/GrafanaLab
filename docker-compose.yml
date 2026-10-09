@@ -1,0 +1,130 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: iot_mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 1883 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: iot_influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=iotuser
+      - DOCKER_INFLUXDB_INIT_PASSWORD=iotpassword123
+      - DOCKER_INFLUXDB_INIT_ORG=iot-lab
+      - DOCKER_INFLUXDB_INIT_BUCKET=telemetry
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=iot-lab-super-secret-auth-token-2024
+      - DOCKER_INFLUXDB_INIT_RETENTION=0
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    healthcheck:
+      test: ["CMD-SHELL", "influx ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  subscriber:
+    build:
+      context: ./subscriber
+      dockerfile: Dockerfile
+    container_name: iot_subscriber
+    restart: unless-stopped
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_TOPIC=sensors/+/telemetry
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=iot-lab-super-secret-auth-token-2024
+      - INFLUXDB_ORG=iot-lab
+      - INFLUXDB_BUCKET=telemetry
+
+  publisher:
+    build:
+      context: ./publisher
+      dockerfile: Dockerfile
+    container_name: iot_publisher
+    restart: unless-stopped
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      subscriber:
+        condition: service_started
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_TOPIC=sensors/datacenter/telemetry
+      - INTERVAL_SECONDS=10
+      - DEVICE_ID=sensor_node_alpha
+      - LOCATION=rack_server_room_01
+
+  webhook-receiver:
+    build:
+      context: ./webhook_receiver
+      dockerfile: Dockerfile
+    container_name: iot_webhook_receiver
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./evidencias:/evidencias
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    container_name: iot_grafana_renderer
+    restart: unless-stopped
+    expose:
+      - "8081"
+    environment:
+      - ENABLE_METRICS=true
+      - AUTH_TOKEN=iot-render-token-secure-2024
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: iot_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      webhook-receiver:
+        condition: service_started
+      renderer:
+        condition: service_started
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+      - GF_RENDERING_RENDERER_TOKEN=iot-render-token-secure-2024
+      - GF_LOG_FILTERS=rendering:debug
+      - GF_PANELS_DISABLE_SANITIZE_HTML=true
+      - GF_UNIFIED_ALERTING_ENABLED=true
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  mosquitto_data:
+  influxdb_data:
+  grafana_data:

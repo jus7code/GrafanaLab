@@ -1,0 +1,120 @@
+================================================================================
+  EVIDENCIA DE CONSULTA DE PUNTOS GUARDADOS EN LA TSDB (InfluxDB v2.7)
+  Plataforma IoT Telemetría — Fecha de ejecución: 2026-10-09 20:25:43 UTC
+================================================================================
+
+1. VERIFICACIÓN DE ORGANIZACIÓN Y BUCKETS EN LA TSDB:
+Comando: influx bucket list --org iot-lab
+--------------------------------------------------------------------------------
+ID			Name		Retention	Shard group duration	Organization ID		Schema Type
+66fd5dfac95dde32	_monitoring	168h0m0s	24h0m0s			7ef468551de014c2	implicit
+1f86c0888e3eb168	_tasks		72h0m0s		24h0m0s			7ef468551de014c2	implicit
+3e857a0267f81bb6	telemetry	infinite	168h0m0s		7ef468551de014c2	implicit
+
+2. TOTAL DE PUNTOS REGISTRADOS EN LA VENTANA DE 4 DÍAS POR VARIABLE:
+Comando: from(bucket: "telemetry") |> range(start: -5d) |> count()
+--------------------------------------------------------------------------------
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:int
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  --------------------------
+2026-10-04T20:25:43.639738353Z  2026-10-09T20:25:43.639738353Z                humidity             environment       sensor_node_alpha     rack_server_room_01                        3338
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:int
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  --------------------------
+2026-10-04T20:25:43.639738353Z  2026-10-09T20:25:43.639738353Z             illuminance             environment       sensor_node_alpha     rack_server_room_01                        3338
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:int
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  --------------------------
+2026-10-04T20:25:43.639738353Z  2026-10-09T20:25:43.639738353Z             temperature             environment       sensor_node_alpha     rack_server_room_01                        3338
+
+3. RANGO TEMPORAL DE LA MUESTRA DE 4 DÍAS (PUNTO MÁS ANTIGUO Y MÁS RECIENTE):
+--------------------------------------------------------------------------------
+PUNTO MÁS ANTIGUO (INICIO DE LA TOMA):
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:43.715598858Z  2026-10-09T20:25:43.715598858Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-05T16:30:48.000000000Z                         26.32
+
+PUNTO MÁS RECIENTE (TIEMPO REAL ACTUAL):
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-09T20:10:43.792022953Z  2026-10-09T20:25:43.792022953Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:40.000000000Z                         22.52
+
+4. MUESTRA DE DATOS RECIENTES INGRESADOS VÍA MQTT (ÚLTIMAS 5 MEDICIONES):
+--------------------------------------------------------------------------------
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:00.000000000Z                         54.18
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:10.000000000Z                         57.03
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:20.000000000Z                         53.74
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:30.000000000Z                         54.46
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:40.000000000Z                         54.72
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:00.000000000Z                           0.2
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:10.000000000Z                             1
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:20.000000000Z                             2
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:30.000000000Z                           1.8
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:40.000000000Z                           1.3
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:00.000000000Z                         23.09
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:10.000000000Z                         23.13
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:20.000000000Z                         22.51
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:30.000000000Z                          22.7
+2026-10-09T20:15:43.866105777Z  2026-10-09T20:25:43.866105777Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:25:40.000000000Z                         22.52
+
+5. ESTADÍSTICAS GLOBALES DE LA VENTANA DE 4 DÍAS (MEDIA, MÍNIMO, MÁXIMO):
+--------------------------------------------------------------------------------
+--- PROMEDIO (MEAN) ---
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ----------------------------
+2026-10-04T20:25:43.942692848Z  2026-10-09T20:25:43.942692848Z                humidity             environment       sensor_node_alpha     rack_server_room_01             52.02582085080897
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ----------------------------
+2026-10-04T20:25:43.942692848Z  2026-10-09T20:25:43.942692848Z             illuminance             environment       sensor_node_alpha     rack_server_room_01            184.70335230676977
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ----------------------------
+2026-10-04T20:25:43.942692848Z  2026-10-09T20:25:43.942692848Z             temperature             environment       sensor_node_alpha     rack_server_room_01            24.211764529658463
+
+--- MÁXIMOS (MAX) ---
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.032706443Z  2026-10-09T20:25:44.032706443Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-08T02:36:48.000000000Z                         68.86
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.032706443Z  2026-10-09T20:25:44.032706443Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:21:28.000000000Z                       1084.11
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.032706443Z  2026-10-09T20:25:44.032706443Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:21:42.000000000Z                         51.02
+
+--- MÍNIMOS (MIN) ---
+Result: _result
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.113351650Z  2026-10-09T20:25:44.113351650Z                humidity             environment       sensor_node_alpha     rack_server_room_01  2026-10-09T20:21:44.000000000Z                          20.7
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.113351650Z  2026-10-09T20:25:44.113351650Z             illuminance             environment       sensor_node_alpha     rack_server_room_01  2026-10-05T22:30:48.000000000Z                             0
+Table: keys: [_start, _stop, _field, _measurement, device_id, location]
+                   _start:time                      _stop:time           _field:string     _measurement:string        device_id:string         location:string                      _time:time                  _value:float
+------------------------------  ------------------------------  ----------------------  ----------------------  ----------------------  ----------------------  ------------------------------  ----------------------------
+2026-10-04T20:25:44.113351650Z  2026-10-09T20:25:44.113351650Z             temperature             environment       sensor_node_alpha     rack_server_room_01  2026-10-08T01:51:48.000000000Z                         18.57

@@ -1,0 +1,12 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: Webhook_Receiver
+    receivers:
+      - uid: cp_webhook_receiver
+        type: webhook
+        settings:
+          url: http://webhook-receiver:5000/webhook
+          httpMethod: POST
+        disableResolveMessage: false

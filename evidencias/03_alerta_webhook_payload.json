@@ -1,0 +1,61 @@
+{
+  "received_at": "2026-10-09T20:22:05.052932+00:00",
+  "status": "resolved",
+  "payload": {
+    "receiver": "Webhook_Receiver",
+    "status": "resolved",
+    "alerts": [
+      {
+        "status": "resolved",
+        "labels": {
+          "alertname": "High Temperature Threshold Exceeded (>35C)",
+          "device_id": "sensor_node_alpha",
+          "grafana_folder": "IoT Platform",
+          "location": "rack_server_room_01",
+          "severity": "critical"
+        },
+        "annotations": {
+          "description": "La temperatura en el rack de servidores super\u00f3 el umbral cr\u00edtico seguro de 35.0\u00b0C.",
+          "summary": "Alerta cr\u00edtica de sobrecalentamiento"
+        },
+        "startsAt": "2026-10-09T20:21:40Z",
+        "endsAt": "2026-10-09T20:22:00Z",
+        "generatorURL": "http://localhost:3000/alerting/grafana/high_temperature_alert/view?orgId=1",
+        "fingerprint": "0b81db9bd3c17e68",
+        "silenceURL": "http://localhost:3000/alerting/silence/new?alertmanager=grafana&matcher=__alert_rule_uid__%3Dhigh_temperature_alert&matcher=device_id%3Dsensor_node_alpha&matcher=location%3Drack_server_room_01&matcher=severity%3Dcritical&orgId=1",
+        "dashboardURL": "",
+        "panelURL": "",
+        "ruleUID": "high_temperature_alert",
+        "values": {
+          "B": 22.62,
+          "C": 0
+        },
+        "valueString": "[ var='B' labels={device_id=sensor_node_alpha, location=rack_server_room_01} type='reduce' value=22.62 ], [ var='C' labels={device_id=sensor_node_alpha, location=rack_server_room_01} type='threshold' value=0 ]",
+        "orgId": 1
+      }
+    ],
+    "groupLabels": {
+      "alertname": "High Temperature Threshold Exceeded (>35C)"
+    },
+    "commonLabels": {
+      "alertname": "High Temperature Threshold Exceeded (>35C)",
+      "device_id": "sensor_node_alpha",
+      "grafana_folder": "IoT Platform",
+      "location": "rack_server_room_01",
+      "severity": "critical"
+    },
+    "commonAnnotations": {
+      "description": "La temperatura en el rack de servidores super\u00f3 el umbral cr\u00edtico seguro de 35.0\u00b0C.",
+      "summary": "Alerta cr\u00edtica de sobrecalentamiento"
+    },
+    "externalURL": "http://localhost:3000/",
+    "appVersion": "13.2.3",
+    "version": "1",
+    "groupKey": "{}:{alertname=\"High Temperature Threshold Exceeded (>35C)\"}",
+    "truncatedAlerts": 0,
+    "orgId": 1,
+    "title": "[RESOLVED] High Temperature Threshold Exceeded (>35C) (sensor_node_alpha IoT Platform rack_server_room_01 critical)",
+    "state": "ok",
+    "message": "**Resolved**\n\nValue: B=22.62, C=0\nLabels:\n - alertname = High Temperature Threshold Exceeded (>35C)\n - device_id = sensor_node_alpha\n - grafana_folder = IoT Platform\n - location = rack_server_room_01\n - severity = critical\nAnnotations:\n - description = La temperatura en el rack de servidores super\u00f3 el umbral cr\u00edtico seguro de 35.0\u00b0C.\n - summary = Alerta cr\u00edtica de sobrecalentamiento\nSource: http://localhost:3000/alerting/grafana/high_temperature_alert/view?orgId=1\nSilence: http://localhost:3000/alerting/silence/new?alertmanager=grafana&matcher=__alert_rule_uid__%3Dhigh_temperature_alert&matcher=device_id%3Dsensor_node_alpha&matcher=location%3Drack_server_room_01&matcher=severity%3Dcritical&orgId=1\n"
+  }
+}

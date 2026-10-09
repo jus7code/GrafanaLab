@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB_Telemetry
+    uid: influxdb_telemetry_uid
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      organization: iot-lab
+      defaultBucket: telemetry
+      tlsSkipVerify: true
+    secureJsonData:
+      token: iot-lab-super-secret-auth-token-2024
+    isDefault: true
+    editable: true

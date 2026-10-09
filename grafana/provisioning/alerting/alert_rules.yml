@@ -1,0 +1,72 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: Telemetry_Alerts
+    folder: IoT Platform
+    interval: 10s
+    rules:
+      - uid: high_temperature_alert
+        title: High Temperature Threshold Exceeded (>35C)
+        condition: C
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: influxdb_telemetry_uid
+            model:
+              query: |
+                from(bucket: "telemetry")
+                  |> range(start: -5m)
+                  |> filter(fn: (r) => r["_measurement"] == "environment")
+                  |> filter(fn: (r) => r["_field"] == "temperature")
+                  |> last()
+          - refId: B
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions: []
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              reducer: last
+              type: reduce
+          - refId: C
+            queryType: ""
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              type: threshold
+              conditions:
+                - evaluator:
+                    params:
+                      - 35
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 5s
+        annotations:
+          summary: "Alerta crítica de sobrecalentamiento"
+          description: "La temperatura en el rack de servidores superó el umbral crítico seguro de 35.0°C."
+        labels:
+          severity: critical

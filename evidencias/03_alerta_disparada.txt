@@ -1,0 +1,18 @@
+
+[2026-10-09T20:21:45.055494+00:00] ALERTA DISPARADA POR GRAFANA
+Estado: firing
+Título: [FIRING:1] High Temperature Threshold Exceeded (>35C) (sensor_node_alpha IoT Platform rack_server_room_01 critical)
+  Regla: High Temperature Threshold Exceeded (>35C)
+  Estado: firing
+  Valores: {'B': 49.79, 'C': 1}
+  Descripción: La temperatura en el rack de servidores superó el umbral crítico seguro de 35.0°C.
+---------------------------------------------------
+
+[2026-10-09T20:22:05.052932+00:00] ALERTA DISPARADA POR GRAFANA
+Estado: resolved
+Título: [RESOLVED] High Temperature Threshold Exceeded (>35C) (sensor_node_alpha IoT Platform rack_server_room_01 critical)
+  Regla: High Temperature Threshold Exceeded (>35C)
+  Estado: resolved
+  Valores: {'B': 22.62, 'C': 0}
+  Descripción: La temperatura en el rack de servidores superó el umbral crítico seguro de 35.0°C.
+---------------------------------------------------
