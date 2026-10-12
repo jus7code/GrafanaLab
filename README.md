@@ -51,7 +51,7 @@ Este repositorio contiene la implementación completa del stack de telemetría I
 | **TSDB** | `influxdb` (`influxdb:2.7-alpine`) | Persistencia y consulta histórica de alta eficiencia (4 días). | `8086` |
 | **Suscriptor/Bridge** | `subscriber` (Python 3.12) | Ingesta desacoplada: consume MQTT y persiste en InfluxDB con timestamp real. | Interno |
 | **Publicador** | `publisher` (Python 3.12) | Simula nodo sensor: emite `temperature`, `humidity`, `illuminance` cada 10 s y precarga ventana de 4 días. | Interno |
-| **Visualización** | `grafana` (`grafana/grafana:latest`) | Grafana OSS aprovisionado automáticamente con Datasource, Dashboard y Reglas de Alerta. | `3000` |
+| **Visualización** | `grafana` (`grafana/grafana:latest`) | Grafana OSS aprovisionado automáticamente con Datasource, Dashboard y Reglas de Alerta. | `80` (HTTP), `3000` |
 | **Receptor de Alertas** | `webhook-receiver` (Python Flask) | Registra disparos de alertas de Grafana en formato JSON estructurado y log plano. | `5000` |
 | **Renderizador** | `renderer` (`grafana-image-renderer:latest`) | Generación automatizada de capturas PNG de paneles y dashboards. | Interno |
 
@@ -89,7 +89,7 @@ Todos los servicios levantarán en orden con healthchecks validados:
 - Grafana provisiona automáticamente el datasource Flux, el dashboard y la regla de alerta.
 
 ### 4. Acceso a las Interfaces Web
-- **Grafana OSS:** `http://<IP_DE_LA_VM>:3000`  
+- **Grafana OSS:** `http://<TU_DOMINIO_O_IP>/` (o `http://<IP_DE_LA_VM>:3000`)  
   - Usuario: `admin`  
   - Contraseña: `admin`  
   - Dashboard: *IoT Platform / IoT Environmental Telemetry — Monitoreo de 4 Días*
@@ -176,3 +176,4 @@ iot-telemetry-platform/
     ├── 03_alerta_webhook_payload.json
     └── 03_grafana_alerta_spike_zoom.png
 ```
+
