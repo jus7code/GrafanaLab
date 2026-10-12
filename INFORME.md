@@ -116,3 +116,4 @@ Todas las evidencias requeridas se encuentran disponibles en la carpeta `/eviden
 - `evidencias/03_alerta_disparada.txt`: Registro cronológico del disparo de alerta (`FIRING` con valor 49.79 °C y posterior `RESOLVED`).
 - `evidencias/03_alerta_webhook_payload.json`: Payload JSON exacto emitido por el motor de alertas de Grafana.
 - `evidencias/03_grafana_alerta_spike_zoom.png`: Visualización detallada de la serie temporal en Grafana durante la ocurrencia del pico anómalo superando la línea de umbral en 35 °C.
+

@@ -57,3 +57,4 @@ docker exec iot_influxdb influx query --org "$INFLUX_ORG" --token "$INFLUX_TOKEN
   'from(bucket: "telemetry") |> range(start: -5d) |> filter(fn: (r) => r._measurement == "environment") |> min()' >> "$OUTPUT_FILE" 2>&1
 
 echo "Consulta completada con éxito. Archivo guardado en: $OUTPUT_FILE"
+
